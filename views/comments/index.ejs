@@ -1,3 +1,19 @@
 <% include ../partials/header %>
-
+<h2>Comments on comments on comments</h2>
+<%  post.comments.forEach(function(comment) { %>
+	<div>
+		<p><a href="/posts/<%= post.id %>/comments/<%= comment._id %>">
+			<%= comment.content%>
+			</a>
+		</p>
+		<h5>Posted on <%= comment.date %> by </h5>
+			<!-- TODO: Add comment.user.name -->
+		<p>
+			<button><a href="/posts/<%= post.id %>/comments/<%= comment._id %>">View comment</a></button>
+		</p>
+	<hr>
+</div>
+<% }) %>
+	<button><a href="/posts/<%= post.id %>/comments/new">New Comment</a></button>
+	<button><a href="/posts">Return Home</a></button>
 <% include ../partials/footer %>

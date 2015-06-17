@@ -2,11 +2,11 @@
 <h2><%= post.title %></h2>
 <h5>Posted on <%= post.date %> by </h5>
 			<!-- TODO: Add post.user.name -->
-	<p><a href="<%=post.content%>"><%=post.content%>
+	<p><a href="<%=post.content%>"><%=post.content%></a>
 	<% post.comments.forEach(function(comment){ %>
 	<div>
 		<p>
-			<strong><%= comment.content %></strong>
+			<strong><a href="/posts/<%= post._id %>/comments/<%= comment.id %>"><%= comment.content %></a></strong>
 			<!-- TODO: ADD DATE -->
 		</p>
 	</div>
@@ -15,4 +15,7 @@
 	<button><a href="/posts">Return Home</a></button>
 	<button><a href="/posts/<%= post._id %>/comments/new">Add a comment</a></button>
 	</div>
+	  <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+    <input type="submit" value="Delete">
+  </form>
 <% include ../partials/footer %>
