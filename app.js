@@ -62,6 +62,11 @@ app.post("/login", function (req, res) {
   });
 });
 
+app.get('/logout', function(req, res){
+	req.logout();
+	res.redirect('/');
+})
+
 //POST routes
 //ROOT
 app.get('/', function(req, res){
@@ -70,21 +75,25 @@ app.get('/', function(req, res){
 
 //index
 app.get('/posts', function(req, res){
-	db.Post.find({}, function(err, posts){
-		if(err){
-			console.log(err);
-			//TODO: figure out what to do with errors 
-			res.render("errors/404")
-		}
-		else{
-			res.render("posts/index", {posts:posts});
-		}
+	req.currentUser(function(err,user){
+		db.Post.find({}, function(err, posts){
+			if(err){
+				console.log(err);
+				//TODO: figure out what to do with errors 
+				res.render("errors/404")
+			}
+			else{
+				res.render("posts/index", {posts:posts, user:user});
+			}
+		})
 	})
 })
 
 //new
 app.get('/posts/new', routeMiddleware.ensureLoggedIn, function(req, res){
-	res.render('posts/new');
+	req.currentUser(function(err,user){
+		res.render('posts/new', {user:user});
+	});
 })
 
 //create
@@ -103,34 +112,36 @@ app.post('/posts', routeMiddleware.ensureLoggedIn, function(req, res){
 
 //show
 app.get('/posts/:id', function(req, res){
-	db.Post.findById(req.params.id)
-	.populate('comments')
-	.exec(function(err, post){
-		if(err){
-			console.log(err);
-			//TODO: error handling
-			res.render('posts/index')
-		}
-		else{
-			res.render("posts/show", {post:post})
-		}
-	});
+		req.currentUser(function(err,user){
+			db.Post.findById(req.params.id)
+			.populate('comments')
+			.exec(function(err, post){
+				if(err){
+					console.log(err);
+					//TODO: error handling
+					res.render('posts/index')
+				}
+				else{
+					res.render("posts/show", {post:post, user:user})
+				}
+			})
+		});
 });
 
 //edit
-app.get('/posts/:id/edit', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
-	db.Post.findById(req.params.id)
-	.populate('comments')
-	.exec(function(err, post){
-		if(err){
-			console.log(err);
-			//TODO: error handling
-			res.render('posts/show')
-		}
-		else{
-			res.render('posts/edit', {post:post})
-		}
-	});
+app.get('/posts/:id/edit', routeMiddleware.ensureLoggedIn, function(req, res){
+			db.Post.findById(req.params.id)
+			.populate('comments')
+			.exec(function(err, post){
+				if(err){
+					console.log(err);
+					//TODO: error handling
+					res.render('posts/show')
+				}
+				else{
+					res.render('posts/edit', {post:post})
+				}
+			});
 });
 
 //update
@@ -148,7 +159,7 @@ app.put('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorr
 });
 
 //destroy
-app.delete('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
+app.delete('/posts/:id', routeMiddleware.ensureLoggedIn, function(req, res){
 	db.Post.findByIdAndRemove(req.params.id, function(err, post){
 		if(err){
 			console.log(err);
@@ -165,33 +176,37 @@ app.delete('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureC
 //COMMENT routes
 //index
 app.get('/posts/:post_id/comments', function(req, res){
-	db.Post.findById(req.params.post_id)
-	.populate('comments')
-	.exec(function(err, post){
-		if(err){
-			//TODO: error handling
-			console.log(err);
-			res.render('/posts');
-		}
-		else{
-			res.render('comments/index', {post:post});
-		}
+	req.currentUser(function(err,user){
+		db.Post.findById(req.params.post_id)
+		.populate('comments')
+		.exec(function(err, post){
+			if(err){
+				//TODO: error handling
+				console.log(err);
+				res.render('/posts');
+			}
+			else{
+				res.render('comments/index', {post:post, user:user});
+			}
+		});
 	});
 });
 
 //new
 app.get('/posts/:post_id/comments/new', routeMiddleware.ensureLoggedIn, function(req, res){
-	db.Post.findById(req.params.post_id)
-	.populate('comments')
-	.exec(function(err, post){
-		if(err){
-			//TODO: error handling
-			console.log(err);
-			res.render('/posts');
-		}
-		else{
-			res.render('comments/new', {post:post});
-		}
+	req.currentUser(function(err,user){
+		db.Post.findById(req.params.post_id)
+		.populate('comments')
+		.exec(function(err, post){
+			if(err){
+				//TODO: error handling
+				console.log(err);
+				res.render('/posts');
+			}
+			else{
+				res.render('comments/new', {post:post, user:user});
+			}
+		});
 	});
 });
 
@@ -217,16 +232,18 @@ app.post('/posts/:post_id/comments', routeMiddleware.ensureLoggedIn, function(re
 
 //show
 app.get('/posts/:post_id/comments/:id', function(req, res){
-	db.Comment.findById(req.params.id)
-	.populate('post')
-	.exec(function(err, comment){
-		if(err){
-		//TODO: error handling
-			console.log(err);
-			res.render('comments');
-		}
-		else
-		res.render('comments/show', {comment:comment, post:comment.post});
+	req.currentUser(function(err,user){
+		db.Comment.findById(req.params.id)
+		.populate('post')
+		.exec(function(err, comment){
+			if(err){
+			//TODO: error handling
+				console.log(err);
+				res.render('comments');
+			}
+			else
+			res.render('comments/show', {comment:comment, post:comment.post, user:user});
+		});
 	});
 });
 

@@ -1,5 +1,5 @@
 <% include ../partials/header %>
-<h5>This comment originally posted on <%= comment.date %> by </h5>
+<h5>This comment originally posted on <%= comment.date %> by <%= comment.user.firstName %></h5>
 			<!-- TODO: Add post.user.name -->
 	<p><%=comment.content%>
 	<button><a href="/posts/<%= post._id%>/comments/<%= comment._id %>/edit">Edit Comment</a></button>
@@ -8,4 +8,7 @@
   </form>
 
   <button><a href="/posts">Back to All Posts</a></button>
+   <a href="/signup">Signup</a>
+ <a href="/login">Login</a>
+ <a href="/logout">Logout</a>
 <% include ../partials/footer %>

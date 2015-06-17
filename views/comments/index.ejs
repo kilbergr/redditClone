@@ -6,14 +6,18 @@
 			<%= comment.content%>
 			</a>
 		</p>
-		<h5>Originally commented on <%= comment.date %> by </h5>
-			<!-- TODO: Add comment.user.name -->
+		<h5>Originally commented on <%= comment.date %> by <%= comment.user.firstName%></h5>
+	
 		<p>
 			<button><a href="/posts/<%= post.id %>/comments/<%= comment._id %>">View comment</a></button>
 		</p>
 	<hr>
 </div>
 <% }) %>
+ <a href="/signup">Signup</a>
+ <a href="/login">Login</a>
+  <a href="/logout">Logout</a>
 	<button><a href="/posts/<%= post.id %>/comments/new">New Comment</a></button>
 	<button><a href="/posts">Return Home</a></button>
+
 <% include ../partials/footer %>

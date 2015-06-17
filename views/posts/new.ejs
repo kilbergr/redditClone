@@ -1,5 +1,6 @@
 <% include ../partials/header %>
 <div id="newpost">
+<p><%= user.firstName %></p>
 <form action="/posts" method="POST">
 	<label for="post[title]">Post Title (required):
 		<input autofocus type="text" name="post[title]" id="">
@@ -12,10 +13,11 @@
 		<input type="text" name="post[tag]" id="">
 	</label>
 	<!-- adding a date as a hidden field -->
-	<input type="hidden" name="post[date]" id="posted">
+	<!-- <input type="hidden" name="post[date]" id="posted"> -->
 	<!-- Add user on submission of post -->
 		<input type="submit" value="Submit">
 </form>
 </div>
+ <a href="/logout">Logout</a>
 <button><a href="/posts">Return Home</a></button>
 <% include ../partials/footer %>

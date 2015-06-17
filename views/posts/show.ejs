@@ -1,7 +1,6 @@
 <% include ../partials/header %>
 <h2><%= post.title %></h2>
-<h5>Originally posted on <%= post.date %> by </h5>
-			<!-- TODO: Add post.user.name -->
+<h5>Originally posted on <%= post.date %> by <%= user.firstName%></h5>
 	<p><a href="<%=post.content%>"><%=post.content%></a>
 	</p>
 	<strong>Comments:</strong>
@@ -20,4 +19,7 @@
 	  <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
     <input type="submit" value="Delete">
   </form>
+ <a href="/signup">Signup</a>
+ <a href="/login">Login</a>
+  <a href="/logout">Logout</a>
 <% include ../partials/footer %>

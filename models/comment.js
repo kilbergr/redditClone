@@ -1,17 +1,22 @@
 var mongoose = require("mongoose");
+var date = new Date();
+var dateComment = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(2,2);
 
 var commentSchema = new mongoose.Schema ({
 												content: {
 													type: String,
 													required: true},
-													date: String,
-													post: {
-														type: mongoose.Schema.Types.ObjectId,
-														ref: "Post"
+												date: {
+													type: String,
+													default: dateComment
 													},
-													user: {
-														type: mongoose.Schema.Types.ObjectId,
-														ref: "User"
+												post: {
+													type: mongoose.Schema.Types.ObjectId,
+													ref: "Post"
+													},
+												user: {
+													type: mongoose.Schema.Types.ObjectId,
+													ref: "User"
 													}
 											});
 

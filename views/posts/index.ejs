@@ -7,8 +7,7 @@
 			<%= post.title%>
 			</a>
 		</h4>
-		<h5>Originally posted on <%= post.date %> by </h5>
-			<!-- TODO: Add post.user.name -->
+		<h5>Originally posted on <%= post.date %> by <%= user.firstName%></h5>
 		<p><a href="<%= post.content %>"><%= post.content %>
 		
 		</p>
@@ -20,6 +19,10 @@
 	<hr>
 </div>
 <% }) %>
-<a href="/posts/new">Add a new post</a>
+ <a href="/signup">Signup</a>
+ <a href="/login">Login</a>
+  <a href="/logout">Logout</a>
+ <a href="/posts/new">Add a new post</a>
+
 
 <% include ../partials/footer %>

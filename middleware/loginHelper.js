@@ -10,9 +10,15 @@ var loginHelpers = function(req, res, next){
 		req.user = null;
 	};
 
-	req.currentUser = function(){
-		return db.User.findById(req.session.id, function(err, user){
-			req.currentUser = user;
+	req.currentUser = function(callback){
+		db.User.findById(req.session.id, function(err, user){
+			if(err){
+				callback(err, null);
+			}
+			else{
+				req.user = user;
+				callback(null, user);
+			}
 		});
 	};
 

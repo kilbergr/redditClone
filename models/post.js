@@ -1,5 +1,7 @@
 var mongoose = require("mongoose");
 var Comment = require("./comment");
+var date = new Date();
+var datePost = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(2,2);
 
 var postSchema = new mongoose.Schema({
 											title: {
@@ -11,7 +13,10 @@ var postSchema = new mongoose.Schema({
 												required: true
 											},
 											tag: String,
-											date: String,
+											date: {
+												type: String,
+												default: datePost
+											},
 											comments: [{
 												type: mongoose.Schema.Types.ObjectId,
 												ref: "Comment"

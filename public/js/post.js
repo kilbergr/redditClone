@@ -1,4 +1,5 @@
 $(function(){
+	//unnecessary and unsecure
 	var postdate = function(){
 		$("#newpost").on("submit", function(event){
 			var date = new Date();
@@ -15,7 +16,9 @@ $(function(){
 			$("#commented").val(dateComment);
 		})
 	}
+//what to do with the profile info?
 
-	postdate();
-	commentdate();
+
+	//postdate();
+	//commentdate();
 })
