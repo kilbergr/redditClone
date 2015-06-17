@@ -1,5 +1,5 @@
 <% include ../partials/header %>
-<h5>This comment posted on <%= comment.date %> by </h5>
+<h5>This comment originally posted on <%= comment.date %> by </h5>
 			<!-- TODO: Add post.user.name -->
 	<p><%=comment.content%>
 	<button><a href="/posts/<%= post._id%>/comments/<%= comment._id %>/edit">Edit Comment</a></button>

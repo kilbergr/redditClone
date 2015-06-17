@@ -210,7 +210,7 @@ app.delete('/posts/:post_id/comments/:id', function(req, res){
 			res.render('comments/index');
 		}
 		else{
-			res.redirect('/posts' + comment.post + '/comments');
+			res.redirect('/posts/' + comment.post + '/comments');
 		}
 	});
 });
