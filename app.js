@@ -4,13 +4,63 @@ morgan = require("morgan"),
 bodyParser = require("body-parser"),
 methodOverride = require("method-override"),
 db = require("./models"),
-session = require("cookie-session");
+session = require("cookie-session"),
+loginMiddleware = require("./middleware/loginHelper"),
+routeMiddleware = require("./middleware/routeHelper");
 
 app.set("view engine", "ejs");
 app.use(morgan("tiny"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(express.static(__dirname + '/public'));
+app.use(loginMiddleware);
+
+//cookie set
+app.use(session({
+	maxAge: 3600000,
+	secret: 'canyoukeepit',
+	name: 'snickerdoodle'
+}));
+
+
+//LOGIN RELATED ROUTES
+//signup page
+app.get('/signup', routeMiddleware.preventLoginSignup, function(req,res){
+  res.render('users/signup');
+});
+
+//create new user
+app.post("/signup", function (req, res) {
+  var newUser = req.body.user;
+  db.User.create(newUser, function (err, user) {
+    if (user) {
+      req.login(user);
+      res.redirect("/posts");
+    } else {
+      console.log(err);
+      // TODO - handle errors in ejs!
+      res.render("users/signup");
+    }
+  });
+});
+
+//login page for existing users
+app.get("/login", routeMiddleware.preventLoginSignup, function (req, res) {
+  res.render("users/login");
+});
+
+app.post("/login", function (req, res) {
+  db.User.authenticate(req.body.user,
+  function (err, user) {
+    if (!err && user !== null) {
+      req.login(user);
+      res.redirect("/posts");
+    } else {
+      // TODO - handle errors in ejs!
+      res.render("users/login");
+    }
+  });
+});
 
 //POST routes
 //ROOT
@@ -33,12 +83,12 @@ app.get('/posts', function(req, res){
 })
 
 //new
-app.get('/posts/new', function(req, res){
+app.get('/posts/new', routeMiddleware.ensureLoggedIn, function(req, res){
 	res.render('posts/new');
 })
 
 //create
-app.post('/posts', function(req, res){
+app.post('/posts', routeMiddleware.ensureLoggedIn, function(req, res){
 	db.Post.create(req.body.post, function(err, post){
 		if(err){
 			console.log(err);
@@ -68,7 +118,7 @@ app.get('/posts/:id', function(req, res){
 });
 
 //edit
-app.get('/posts/:id/edit', function(req, res){
+app.get('/posts/:id/edit', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
 	db.Post.findById(req.params.id)
 	.populate('comments')
 	.exec(function(err, post){
@@ -84,7 +134,7 @@ app.get('/posts/:id/edit', function(req, res){
 });
 
 //update
-app.put('/posts/:id', function(req, res){
+app.put('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
 	db.Post.findByIdAndUpdate(req.params.id, req.body.post, function(err, post){
 		if(err){
 			console.log(err);
@@ -98,7 +148,7 @@ app.put('/posts/:id', function(req, res){
 });
 
 //destroy
-app.delete('/posts/:id', function(req, res){
+app.delete('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
 	db.Post.findByIdAndRemove(req.params.id, function(err, post){
 		if(err){
 			console.log(err);
@@ -130,7 +180,7 @@ app.get('/posts/:post_id/comments', function(req, res){
 });
 
 //new
-app.get('/posts/:post_id/comments/new', function(req, res){
+app.get('/posts/:post_id/comments/new', routeMiddleware.ensureLoggedIn, function(req, res){
 	db.Post.findById(req.params.post_id)
 	.populate('comments')
 	.exec(function(err, post){
@@ -146,7 +196,7 @@ app.get('/posts/:post_id/comments/new', function(req, res){
 });
 
 //create
-app.post('/posts/:post_id/comments', function(req, res){
+app.post('/posts/:post_id/comments', routeMiddleware.ensureLoggedIn, function(req, res){
 	db.Comment.create(req.body.comment, function (err, comments){
 		if(err){
 			//TODO: error handling
@@ -181,14 +231,14 @@ app.get('/posts/:post_id/comments/:id', function(req, res){
 });
 
 //edit
-app.get('/posts/:post_id/comments/:id/edit', function(req, res){
+app.get('/posts/:post_id/comments/:id/edit', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectCommenter, function(req, res){
 	db.Comment.findById(req.params.id, function(err, comment){
 		res.render('comments/edit', {comment:comment});
 	});
 });
 
 //update
-app.put('/comments/:id', function(req, res){
+app.put('/comments/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectCommenter, function(req, res){
 	db.Comment.findByIdAndUpdate(req.params.id, req.body.comment, function(err, comment){
 		if(err){
 			//TODO: error handling
@@ -202,7 +252,7 @@ app.put('/comments/:id', function(req, res){
 });
 
 //destroy
-app.delete('/posts/:post_id/comments/:id', function(req, res){
+app.delete('/posts/:post_id/comments/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectCommenter, function(req, res){
 	db.Comment.findByIdAndRemove(req.params.id, function(err, comment){
 		if(err){
 			//TODO: error handling
