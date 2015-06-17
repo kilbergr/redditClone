@@ -1,0 +1,29 @@
+{
+  "name": "redditclone",
+  "version": "1.0.0",
+  "description": "Mini reddit clone using Mongoose with auth",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kilbergr/redditClone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kilbergr/redditClone/issues"
+  },
+  "homepage": "https://github.com/kilbergr/redditClone",
+  "dependencies": {
+    "bcrypt": "^0.8.3",
+    "body-parser": "^1.13.1",
+    "cookie-session": "^1.1.0",
+    "ejs": "^2.3.1",
+    "express": "^4.12.4",
+    "method-override": "^2.3.3",
+    "mongoose": "^4.0.5",
+    "morgan": "^1.6.0"
+  }
+}
