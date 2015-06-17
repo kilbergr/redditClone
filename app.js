@@ -188,7 +188,7 @@ app.get('/posts/:post_id/comments/:id/edit', function(req, res){
 });
 
 //update
-app.put('/posts/:post_id/comments/:id', function(req, res){
+app.put('/comments/:id', function(req, res){
 	db.Comment.findByIdAndUpdate(req.params.id, req.body.comment, function(err, comment){
 		if(err){
 			//TODO: error handling
@@ -196,7 +196,7 @@ app.put('/posts/:post_id/comments/:id', function(req, res){
 			res.render('comments/edit');
 		}
 		else{
-			res.redirect('/posts' + comment.post + "/comments");
+			res.redirect('/posts/' + comment.post + "/comments");
 		}
 	});
 });

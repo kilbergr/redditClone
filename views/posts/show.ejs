@@ -3,10 +3,12 @@
 <h5>Posted on <%= post.date %> by </h5>
 			<!-- TODO: Add post.user.name -->
 	<p><a href="<%=post.content%>"><%=post.content%></a>
+	</p>
+	<strong>Comments:</strong>
 	<% post.comments.forEach(function(comment){ %>
-	<div>
+	<div id="comments">
 		<p>
-			<strong><a href="/posts/<%= post._id %>/comments/<%= comment.id %>"><%= comment.content %></a></strong>
+		 <a href="/posts/<%= post._id %>/comments/<%= comment.id %>"><%= comment.content %></a>
 			<!-- TODO: ADD DATE -->
 		</p>
 	</div>
