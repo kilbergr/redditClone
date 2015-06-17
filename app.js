@@ -176,13 +176,13 @@ app.get('/posts/:post_id/comments/:id', function(req, res){
 			res.render('comments');
 		}
 		else
-		res.render('comments/show', {comment:comment});
+		res.render('comments/show', {comment:comment, post:comment.post});
 	});
 });
 
 //edit
 app.get('/posts/:post_id/comments/:id/edit', function(req, res){
-	db.Comment.findyById(req.params.id, function(err, comment){
+	db.Comment.findById(req.params.id, function(err, comment){
 		res.render('comments/edit', {comment:comment});
 	});
 });
