@@ -1,0 +1,18 @@
+<% include ../partials/header %>
+<h2><%= post.title %></h2>
+<h5>Posted on <%= post.date %> by </h5>
+			<!-- TODO: Add post.user.name -->
+	<p><a href="<%=post.content%>"><%=post.content%>
+	<% post.comments.forEach(function(comment){ %>
+	<div>
+		<p>
+			<strong><%= comment.content %></strong>
+			<!-- TODO: ADD DATE -->
+		</p>
+	</div>
+	<% }) %>
+	<div>
+	<button><a href="/posts">Return Home</a></button>
+	<button><a href="/posts/<%= post._id %>/comments/new">Add a comment</a></button>
+	</div>
+<% include ../partials/footer %>

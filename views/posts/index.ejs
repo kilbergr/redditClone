@@ -1,0 +1,25 @@
+<% include ../partials/header %>
+<h1>OMG IT'S A REDDIT CLONE</h1>
+<h2>Please excuse inaccuracies</h2>
+<%  posts.forEach(function(post) { %>
+	<div>
+		<h4><a href="/posts/<%= post._id %>">
+			<%= post.title%>
+			</a>
+		</h4>
+		<h5>Posted on <%= post.date %> by </h5>
+			<!-- TODO: Add post.user.name -->
+		<p><a href="<%= post.content %>"><%= post.content %>
+		
+		</p>
+		<p>
+			<button><a href="/posts/<%= post._id %>/edit">Edit Post</a></button>
+
+			<button><a href="/posts/<%= post._id %>/comments/new">Add a comment</a></button>
+		</p>
+	<hr>
+</div>
+<% }) %>
+<a href="/posts/new">Add a new post</a>
+
+<% include ../partials/footer %>
