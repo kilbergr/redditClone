@@ -1,6 +1,7 @@
 <% include ../partials/header %>
-<h5>This comment originally posted on <%= comment.date %> by <%= comment.user.firstName %></h5>
-			<!-- TODO: Add post.user.name -->
+<h5>This comment originally posted on <%= comment.date %> </h5>
+			<!-- TODO: Add post.user.name. Can't do using currentUser-have to use poster's id...  by <%= user.firstName %>-->
+
 	<p><%=comment.content%>
 	<button><a href="/posts/<%= post._id%>/comments/<%= comment._id %>/edit">Edit Comment</a></button>
 	  <form action="/posts/:post_id/comments/<%= comment._id%>?_method=DELETE" method="POST">

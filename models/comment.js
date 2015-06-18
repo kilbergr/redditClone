@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
-var date = new Date();
-var dateComment = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(2,2);
+var dateC = new Date();
+var dateComment = (dateC.getMonth() + 1) + "/" + dateC.getDate() + "/" + dateC.getFullYear().toString().substr(2,2);
 
 var commentSchema = new mongoose.Schema ({
 												content: {

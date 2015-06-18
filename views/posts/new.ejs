@@ -1,6 +1,9 @@
 <% include ../partials/header %>
+<div id="profile">
+<p>You're posting as <%= user.firstName %>.</p>
+<img width="100px" src="<%= user.avatar %>" alt="profile picture">
+</div>
 <div id="newpost">
-<p><%= user.firstName %></p>
 <form action="/posts" method="POST">
 	<label for="post[title]">Post Title (required):
 		<input autofocus type="text" name="post[title]" id="">

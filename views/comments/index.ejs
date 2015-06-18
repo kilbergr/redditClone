@@ -6,10 +6,12 @@
 			<%= comment.content%>
 			</a>
 		</p>
-		<h5>Originally commented on <%= comment.date %> by <%= comment.user.firstName%></h5>
+		<h5>Originally commented on <%= comment.date %> by <%= user.firstName%></h5>
 	
 		<p>
+		<button><a href="/posts/<%= post.id %>">View post</a></button>
 			<button><a href="/posts/<%= post.id %>/comments/<%= comment._id %>">View comment</a></button>
+
 		</p>
 	<hr>
 </div>

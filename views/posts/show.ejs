@@ -1,9 +1,9 @@
 <% include ../partials/header %>
 <h2><%= post.title %></h2>
-<h5>Originally posted on <%= post.date %> by <%= user.firstName%></h5>
-	<p><a href="<%=post.content%>"><%=post.content%></a>
+<h5>Originally posted on <%= post.date %></h5>
+	<p><%=post.content%>
 	</p>
-	<strong>Comments:</strong>
+	<a href="/posts/<%= post._id %>/comments"><strong>Comments:</strong></a>
 	<% post.comments.forEach(function(comment){ %>
 	<div id="comments">
 		<p>

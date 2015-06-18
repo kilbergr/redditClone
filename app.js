@@ -75,7 +75,7 @@ app.get('/', function(req, res){
 
 //index
 app.get('/posts', function(req, res){
-	req.currentUser(function(err,user){
+
 		db.Post.find({}, function(err, posts){
 			if(err){
 				console.log(err);
@@ -83,9 +83,10 @@ app.get('/posts', function(req, res){
 				res.render("errors/404")
 			}
 			else{
-				res.render("posts/index", {posts:posts, user:user});
+				res.render("posts/index", {posts:posts});
+
 			}
-		})
+	
 	})
 })
 
@@ -105,14 +106,21 @@ app.post('/posts', routeMiddleware.ensureLoggedIn, function(req, res){
 			res.render("posts/new");
 		}
 		else{
-			res.redirect('/posts');
+			req.currentUser(function(err,user){
+				//add user to post
+				post.user = user._id;
+				//user.posts.push(post);
+				post.save();
+				//user.save();
+				res.redirect('/posts');
+			})
 		}
 	});
 });
 
 //show
 app.get('/posts/:id', function(req, res){
-		req.currentUser(function(err,user){
+		
 			db.Post.findById(req.params.id)
 			.populate('comments')
 			.exec(function(err, post){
@@ -122,14 +130,14 @@ app.get('/posts/:id', function(req, res){
 					res.render('posts/index')
 				}
 				else{
-					res.render("posts/show", {post:post, user:user})
+					res.render("posts/show", {post:post})
 				}
-			})
+
 		});
 });
 
 //edit
-app.get('/posts/:id/edit', routeMiddleware.ensureLoggedIn, function(req, res){
+app.get('/posts/:id/edit', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
 			db.Post.findById(req.params.id)
 			.populate('comments')
 			.exec(function(err, post){
@@ -145,7 +153,7 @@ app.get('/posts/:id/edit', routeMiddleware.ensureLoggedIn, function(req, res){
 });
 
 //update
-app.put('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
+app.put('/posts/:id', routeMiddleware.ensureLoggedIn, function(req, res){
 	db.Post.findByIdAndUpdate(req.params.id, req.body.post, function(err, post){
 		if(err){
 			console.log(err);
@@ -159,7 +167,7 @@ app.put('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorr
 });
 
 //destroy
-app.delete('/posts/:id', routeMiddleware.ensureLoggedIn, function(req, res){
+app.delete('/posts/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectPoster, function(req, res){
 	db.Post.findByIdAndRemove(req.params.id, function(err, post){
 		if(err){
 			console.log(err);
@@ -219,12 +227,16 @@ app.post('/posts/:post_id/comments', routeMiddleware.ensureLoggedIn, function(re
 			res.render('comments/new');
 		}
 		else{
-			db.Post.findById(req.params.post_id, function(err, post){
-			post.comments.push(comments);
-			comments.post = post._id;
-			comments.save();
-			post.save();
-			res.redirect('/posts/' + req.params.post_id + "/comments");
+			req.currentUser(function(err,user){
+				db.Post.findById(req.params.post_id, function(err, post){
+				//add user to comment
+				post.comments.push(comments);
+				comments.post = post._id;
+				comments.user = user._id;
+				comments.save();
+				post.save();
+				res.redirect('/posts/' + req.params.post_id + "/comments");
+				});
 			});
 		}
 	});
@@ -255,7 +267,7 @@ app.get('/posts/:post_id/comments/:id/edit', routeMiddleware.ensureLoggedIn, rou
 });
 
 //update
-app.put('/comments/:id', routeMiddleware.ensureLoggedIn, routeMiddleware.ensureCorrectCommenter, function(req, res){
+app.put('/posts/:post_id/comments/:id', routeMiddleware.ensureLoggedIn, function(req, res){
 	db.Comment.findByIdAndUpdate(req.params.id, req.body.comment, function(err, comment){
 		if(err){
 			//TODO: error handling

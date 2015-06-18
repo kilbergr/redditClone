@@ -14,7 +14,17 @@ var userSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    avatar: String
+    avatar: String,
+    
+    comments: [{
+               type: mongoose.Schema.Types.ObjectId,
+               ref: "Comment"
+               }],
+    posts: [{
+               type: mongoose.Schema.Types.ObjectId,
+               ref: "Post"
+               }],
+
   });
 //presave hook: runs right before we save user
 userSchema.pre('save', function(next) {
