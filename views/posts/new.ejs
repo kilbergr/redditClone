@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 <div id="profile">
-<p>You're posting as <%= user.firstName %>.</p>
+<p class="bg-warning"> You're posting as <%= user.firstName %>.</p>
 <img width="100px" src="<%= user.avatar %>" alt="profile picture">
 </div>
 <div id="newpost">
@@ -18,9 +18,9 @@
 	<!-- adding a date as a hidden field -->
 	<!-- <input type="hidden" name="post[date]" id="posted"> -->
 	<!-- Add user on submission of post -->
-		<input type="submit" value="Submit">
+		<input class="btn btn-default" type="submit" value="Submit">
 </form>
 </div>
- <a href="/logout">Logout</a>
-<button><a href="/posts">Return Home</a></button>
+ <a class="btn btn-default" href="/logout">Logout</a>
+<button class="btn btn-success"><a href="/posts">Return Home</a></button>
 <% include ../partials/footer %>

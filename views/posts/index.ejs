@@ -12,17 +12,17 @@
 		
 		</p>
 		<p>
-			<button><a href="/posts/<%= post._id %>/edit">Edit Post</a></button>
+			<button class="btn btn-info"><a href="/posts/<%= post._id %>/edit">Edit Post</a></button>
 
-			<button><a href="/posts/<%= post._id %>/comments/new">Add a comment</a></button>
+			<button class="btn btn-primary"><a href="/posts/<%= post._id %>/comments/new">Add a comment</a></button>
 		</p>
 	<hr>
 </div>
 <% }) %>
- <a href="/signup">Signup</a>
- <a href="/login">Login</a>
-  <a href="/logout">Logout</a>
- <a href="/posts/new">Add a new post</a>
+ <a class="btn btn-default" href="/signup">Signup</a>
+ <a class="btn btn-default" href="/login">Login</a>
+ <a class="btn btn-default" href="/logout">Logout</a>
+ <a class="btn btn-success" href="/posts/new">Add a new post</a>
 
 
 <% include ../partials/footer %>

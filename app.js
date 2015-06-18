@@ -244,7 +244,6 @@ app.post('/posts/:post_id/comments', routeMiddleware.ensureLoggedIn, function(re
 
 //show
 app.get('/posts/:post_id/comments/:id', function(req, res){
-	req.currentUser(function(err,user){
 		db.Comment.findById(req.params.id)
 		.populate('post')
 		.exec(function(err, comment){
@@ -254,9 +253,8 @@ app.get('/posts/:post_id/comments/:id', function(req, res){
 				res.render('comments');
 			}
 			else
-			res.render('comments/show', {comment:comment, post:comment.post, user:user});
+			res.render('comments/show', {comment:comment, post:comment.post});
 		});
-	});
 });
 
 //edit
