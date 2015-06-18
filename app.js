@@ -220,7 +220,7 @@ app.get('/posts/:post_id/comments/new', routeMiddleware.ensureLoggedIn, function
 
 //create
 app.post('/posts/:post_id/comments', routeMiddleware.ensureLoggedIn, function(req, res){
-	db.Comment.create(req.body.comment, function (err, comments){
+	db.Comment.create(req.body.comment, function (err, comment){
 		if(err){
 			//TODO: error handling
 			console.log(err);
@@ -230,10 +230,10 @@ app.post('/posts/:post_id/comments', routeMiddleware.ensureLoggedIn, function(re
 			req.currentUser(function(err,user){
 				db.Post.findById(req.params.post_id, function(err, post){
 				//add user to comment
-				post.comments.push(comments);
-				comments.post = post._id;
-				comments.user = user._id;
-				comments.save();
+				post.comments.push(comment);
+				comment.post = post._id;
+				comment.user = user._id;
+				comment.save();
 				post.save();
 				res.redirect('/posts/' + req.params.post_id + "/comments");
 				});
